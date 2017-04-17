@@ -1,6 +1,8 @@
 ## user
 *.not.md
 *.huiyi.md
+export
+exports
 
 # Logs
 logs

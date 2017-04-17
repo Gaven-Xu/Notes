@@ -1,0 +1,20 @@
+{
+    "ftpConfig": {
+        "host": "www.unnuo.com",
+        "username": "gaven2046",
+        "password": "asx10086"
+    },
+    "ftpBatches": [
+        {
+            "localRoot": "./",
+            "remoteRoot": "/wwwroot/teach",
+            "match": [
+                "!upload.sh",
+								"*.html",
+								"!node_modules",
+                "!ftp_config.json",
+                "!package.json"
+            ]
+        }
+    ]
+}
