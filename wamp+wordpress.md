@@ -21,11 +21,6 @@
 
     electron nw.js
 
-
-
-
-
-
 # 1. 安装wamp
 
 ## 1.2 创建数据库
