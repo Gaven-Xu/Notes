@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 26px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+body
+{
+    background-color: white;
+}
+.emoji
+{
+    height: 20px;
+}
+</style>
+    </head>
+    <body>
+        <article class="vscode-light markdown-body">
+            <!-- TOC depthFrom:1 depthTo:6 orderedList:false updateOnSave:false withLinks:false -->
+<ul>
+<li>
+<ol>
+<li>前端简介</li>
+</ol>
+<ul>
+<li>1.1. 一 语言对比</li>
+<li>1.2. 二 原文来自Medium(译文来自360前端团队)</li>
+<li>1.3. 三 Java的前景真的就比web前端好的多吗</li>
+<li>1.4. 四 前端程序员会不会被淘汰</li>
+<li>1.5. 五 培训靠谱还是自学靠谱</li>
+<li>1.6. 六 各大企业前端团队</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+<hr>
+<h1 id="1">1. 前端简介</h1>
+<h2 id="11">1.1. 一 语言对比</h2>
+<pre><code>在以前，我们从来不会拿前端语言(HTML/CSS/JavaScript)与其它语言(java / php / ... ...)进行对比，然后，现在前端语言，尤其是JavaScript因为Nodejs的出现，已经涉足后端领域，在很多企业，JavaScript已经用来承担起很多后端工作，而不仅仅是试水。因此，今天，JavaScript可以用来与其它语言对比
+</code></pre>
+<p><strong>JavaScript:</strong></p>
+<pre><code>桌面程序(NWjs)、动态网站(Nodejs)、Android/IOS、网页前端、游戏、构建脚本(Gulp、Grunt)
+</code></pre>
+<p><strong>Java</strong></p>
+<pre><code>用于开发桌面程序、动态网站、Android应用
+</code></pre>
+<p><strong>C#</strong></p>
+<pre><code>用于开发桌面程序、动态网站
+</code></pre>
+<p><strong>PHP</strong></p>
+<pre><code>用于开发桌面程序、动态网站
+</code></pre>
+<p><strong>Swift</strong></p>
+<pre><code>IOS应用、IOS游戏
+</code></pre>
+<hr>
+<h2 id="12-medium360">1.2. 二 原文来自Medium(译文来自360前端团队)</h2>
+<p><a href="http://www.75team.com/post/front-end-is-and-javascript-is.html">链接：前端将要统治世界，让 JavaScript 君临天下</a></p>
+<p><a href="http://www.zcfy.cc/article/1446">英文原文1</a></p>
+<p><a href="https://medium.com/front-end-hacking/front-end-is-and-javascript-is-d4bc3a8edbb7#.eq0qre6du">英文原文2</a></p>
+<hr>
+<h2 id="13-javaweb">1.3. 三 Java的前景真的就比web前端好的多吗</h2>
+<p><a href="https://www.zhihu.com/question/35465394">链接：Java的前景真的就比web前端好的多吗？</a></p>
+<p><strong><em>夜雨听风 前端码农</em></strong></p>
+<p>作者：夜雨听风 链接：<a href="https://www.zhihu.com/question/35465394/answer/62962189">https://www.zhihu.com/question/35465394/answer/62962189</a> 来源：知乎 著作权归作者所有，转载请联系作者获得授权。</p>
+<p>... ...</p>
+<p>1、北京不管大公司还是小公司现在都需要前端。二线城市三线城市一个人当3个人用的当我没说。</p>
+<p>2、H5的出现算是为前端这个岗位正式正名。他们眼里的前端那是3年前的状况。如果你觉得网上说法不可靠，那么最简单的是去招聘市场，或者干脆点，去招聘网站，前端工程师每天刷新6000多个职位那都是假的？</p>
+<p>3、前端工资低，是比java低一点，我一年工作经验，目前不算分红年薪10万。1年的java你能高哪去？有人跳出来说，5年10年呢？OK，那是后话。我只能说，5年能站在前端的顶端，你的月薪也不会低于30K，而这个薪资，对于java程序员来说，也不是那么容易拿到的，因为java更难。</p>
+<p>4、我所在的公司用的是bootstrap框架，之前也是没有前端，可是我为什么来了呢，因为这帮搞java的弄不明白前端这些东西了，他们改点东西需要付出10倍的时间去修改，还耽误后台的进程。如果哪家公司连这都忍得了的话，那么这家公司也死得很快。一家效率都不要的公司还指望什么？</p>
+<p>5、前端程序员缺口非常大。因为前端算去年才正式被列为一个岗位，我去年投简历的时候都没有前端这一可选项，是自己手打的。然而H5的火热，前端难度加大，后台程序员不能完全搞定，导致前端程序员供不应求，很多HR招前端，3个月都招不到人。</p>
+<p>6、美工和前端在现在的公司里是分开的两个职位。这已经不是3年前的职场了。</p>
+<p>前端程序员没什么技术含量？笑话，css就能搞死他们。因为css比起java基本上可以说没有什么逻辑性可言。是简单，可就是写不明白。</p>
+<p>java要求严谨的逻辑思维，入门门槛较高，工资也略高，这很正常。我自身就是一个前端程序员，1年工作经验月薪9K，我同事前端2年工作经验15K，你觉得就算比java低，又低到哪里去了？</p>
+<p><strong><em>我在中小型企业呆过，10人的，20人的，到现在600人的，如果小企业不要前端的话，那么我是如何成长起来的？</em></strong></p>
+<p>网上的话你要半信半疑，你&quot;朋友&quot;的话也不能全信，毕竟你身边的朋友也是没有参加到实际工作中的，他没做过前端，没有发言权。 坚持你喜欢的，才有动力继续下去。做一件不喜欢的事，会长远么？ 很多项目经理说过一句话：app必死，H5永生。（这不是我个人观点，喷子请绕路。） ... ...</p>
+<hr>
+<p><strong><em>wang z 人生很短也很美妙</em></strong></p>
+<p>java javascript都是全栈语言 都异常强大 精通了 没有孰高孰低</p>
+<hr>
+<p><strong><em>靳洪飞 muhu28.com-纯爷们来的纯IT技术社区</em></strong></p>
+<p>个人感觉，好多人有误区 1）哪个火学啥？ 2）哪个赚钱多学啥？</p>
+<p>我认为： 首先，自己要有一个方向，变来变去，肯定哪个都学不好 其次&quot;前景&quot;或者直白的说&quot;钱景&quot;是和 1）能力有关系的，没能力挣大钱的几率小很多。 2）机遇有关系，怀才不遇的人多的是。 3）自己喜不喜欢所处的行业，未来是否有明确的规划。</p>
+<hr>
+<h2 id="14">1.4. 四 前端程序员会不会被淘汰</h2>
+<p><a href="https://www.zhihu.com/question/50473087">链接：前端程序员会不会被淘汰？</a></p>
+<p><strong><em>靠颜值取胜 Game over, and over, and over</em></strong></p>
+<p>前几天看到新闻，在github上的repo数js排到第一，比第二名java多1/3，第三名python多一倍（<a href="http://githut.xn--info-379x">http://githut.info）</a></p>
+<p>前几天看新闻，看到chrome的前端工程师用纯js+html做了一个录音web app，自带存储+离线+云端同步。（YouTube：Google chrome developer）</p>
+<p>前几天发现web版facebook可以推送通知，即使没有打开任何网页。</p>
+<p>再前几天看到js能写手机程序，ios和安卓都行（nodejs+react native），听说Facebook就是用这个写的，还有安卓版手机QQ和QQ音乐。</p>
+<p>再前几天看到纯js+html能写桌面app，还能访问桌面的API（electron），据说atom，slack，visual basic code都是用node js+html写的。</p>
+<p>前几天看到维基百科的前端工程师以毫秒级别进行js的性能优化。</p>
+<p>再前几天看到JavaScript能写服务器（nodejs）</p>
+<p>突然想到，在那之前，我好像也问过同样的问题。</p>
+<hr>
+<p><strong><em>马天翼 手淘weex</em></strong></p>
+<p>现在貌似趋势都是其他端的程序员危机感更强，前端都在躺赢。</p>
+<hr>
+<p><strong><em>Mad Wiki 浏览器通灵师</em></strong></p>
+<p>原来前端是写网页的，我还以为是实现和管理业务逻辑以及交互的。</p>
+<p>对了，傻瓜式生成网页的东西老早就有了，不需要前端了。自助建站的也有一大堆，还有leancloud那种东西，也不需要后端了。也有生成app的软件，也不需要ios和android程序员。什么人脸识别和声音识别，也有第三方免费或者收费的api可以调用，也不用学。什么3d图形也有大量傻瓜式的软件，也不用学......</p>
+<p>都没前途，都别学了，统统都会被淘汰的。不如我们坐等被淘汰吧。</p>
+<p>就从我们不去考驾照，等着自动驾驶席卷全球开始......</p>
+<hr>
+<p><strong><em>陈小挺 @知乎管理：我女友是法学院高材生，她知...</em></strong></p>
+<p>你现在的状态和想法其实和那些----&quot;给你3000块帮我做一个淘宝那样的网站&quot;的土老板一个样。</p>
+<p>土老板们不懂技术，不知道所谓&quot;淘宝那样的网站&quot;的前后端架构有多复杂。&quot;淘宝那样的网站&quot;是需要大量的人用大量的金钱和时间成本一点一滴积累起来的，不要告诉我你以为&quot;淘宝那样的网站&quot;是工具自动生成的。</p>
+<p>而你刚入行，对这行一无所知，不是你危机意识过于强烈，而是对自己及行业前途的迷茫和无知所致。随着你对行业的了解慢慢深入，你的疑虑自然会迎刃而解。</p>
+<p>而你现在需要做的是，遵从自己的意志和兴趣，积极积累知识和经验，以高高的姿态迎接未来扑面而来的挑战和压力。</p>
+<hr>
+<p><strong><em>Dang 发呆工程师</em></strong></p>
+<p>除非没有交互了， 否则，前端一定会在。</p>
+<p>人们对交互越挑剔， 前端就越重要</p>
+<hr>
+<p><strong><em>汪志成 十八年码农 / 谷歌开发技术专家(GDE) / ...</em></strong></p>
+<p>作为目前的前端程序员，我只能说:就算现在改写后端我也会写得比大部分后端好。具体技术分为前端后端，但是研发能力不分。</p>
+<hr>
+<p><strong><em>孙欣乐 伪全栈，专注前端挖坑</em></strong></p>
+<p>举个例子，工地的临时板间房子和跨海大桥，用的原料都是钢筋水泥沙子，但是工程复杂程度天差地别。</p>
+<p>同样的，生成出来的网页和企业的网页产品，原料都是js，css，html这些（字节码标准出来后，能用别的语言，目前来说原料就这三个没错）。原料相同，复杂程度也是天差地别。 所以要不你来生成一个网页？要求不高，就淘宝京东那样的 ；）</p>
+<h2 id="15">1.5. 五 培训靠谱还是自学靠谱</h2>
+<p><a href="https://www.zhihu.com/question/31059577">链接：做web前端开发，培训靠谱还是自学靠谱？</a></p>
+<p>相关专业，自学能力好的，入门前端需要18-22周。能达到现在市面上的初级前端要求 ，而且还不涉及&quot;大前端&quot;，就业比较难，在杭州薪资3-6K</p>
+<p>而大前端的学习内容里面，必然有Node和Angular、React之类框架。这是自学较难的部分，以下是知乎上一个培训经历：</p>
+<p><strong><em>胡冰 web前端开发</em></strong></p>
+<p>这个提问是在今年六月份的时候发的。到现在为止，已经过了半年的时间。截止到现在，这条提问的浏览量是218K、关注人数1570、回答数104条。这期间也有好多人问我，最后结果怎么样了。也有人说，这条问题的关注度挺高的，我是否应该说一下我的经历。我觉得也应该讲述一下，这6个月的时间究竟发生了什么，年终岁尾，权当是总结，也是给自己一个交代、给关注这个问题的人一个交代，如果真的有什么地方能帮助到那些徘徊在路上的人，那。。。也是极好的。更多的是梳理一下自己。所以可能会有点长，不过，我尽量把它写的不那么无聊。 首先，我要声明一下问题的本身。这问题的所有情况都是真实的----除了性别是我杜撰的。这也是一个我超级想吐槽的地方。同样的问题，只不过我没有加上性别，在知乎上提问的最初两个星期，关注只有可怜的1个人、评论1条、浏览量不过90多条。我有点不知所措，开始我以为是我提问的方式有什么问题，或者打开的方式不对。然而经过某猥琐程序员朋友的启发，他说你把性别换成女的试试。结果，我只能用斐然来形容。开始的时候我写出那些数据也正是想证明这个问题。虽然这也客观的说明了中国程序员的现状，哈哈，好吧，其实这不重要！而且现在我也身在其中。这就是个善意的玩笑，至少结果是好的。收到了很多的回复，积极的、消极的、诚恳的、认真的、幽默的、扯淡的！事实上，我也在这其中收获了很多启发。在此表示感谢。是的，就是这样，这才是真相，无须验明正身的真实。如果这是一种欺骗、如果这伤害到了某些玻璃心的朋友、如果你想问我，我擦，人与人之间基本的信任去哪了？！我也只能说。。。喝点热水就好了~。</p>
+<p><strong>一、为什么离开银行而选择互联网</strong></p>
+<p>这也是根据一些评论做出的解释。评论中也有好多说为什么离开银行的。他们把这种行为看做是从一个坑爬出来，然后跳进另一个坑。有好多劝我，别被心灵鸡汤管迷糊了，别被互联网泡沫的欺骗了。我从来不喝鸡汤，也从来不给别人灌鸡汤，上段时间看到了一条新闻，澳大利亚的某位博士说，喜欢鸡汤的人的智商普遍比较低。。当然，这和事情本身并没有什么联系。我离开银行是因为很多个人原因。每个人的情况都不一样。去那里完全是迫于家人给的压力，他们的想法就是平平稳稳的一生，这是才是正道。可是一颗年轻的心真的不是那么容易平静的下来，甚至选择一个不确定的未来，即使前面就是所谓的南墙，但是在没有撞到之前，那里给予我的诱惑却远大于那些警告。就像张爱玲说的那样，非走不可的弯路。并且这并不就是弯路，也许是外面的世界很精彩。这件事也是我二十几年人生中，为数不多我自己感觉很傻逼的事情。而且我做了1年。在离开那里之后，无数次的幻想，为什么当初我没有像一些励志书籍中描写的成功人士一样。看了看破旧的办公楼和无所事事的人们，然后头也不回的走掉。我觉得这样范儿很正，然而并没有。。在那里工作的一年，主要是做一些理财经理的工作，有的时候做柜员。每天会跟很多人交流，傻子、疯子、妖怪什么都有。其实最让我难以忍受的是那种制度。极度的官僚主义和形式主义。而我非常的自信----我完全不是对手。原因很简单，我虽然学会了当儿子，可是却学不会装孙子。毕竟这就是生活。所谓人在屋檐下，而为了生存适当的低头我是可以接受的，但是低的太过分离跪下就不远了。这期间也发生了很多令我哭笑不得的事情，如果大家有兴趣，我也许可以找个时间写写那段经历。总而言之，这一切导致了我离开了那个地方。而选择互联网对于我来说并没有什么特殊的原因。从小我就对电脑有着极度浓厚的兴趣，好吧，我承认是电脑游戏。。之后上大学的时候学的嵌入式，也写过几行代码。有一段时间对广告设计和网页设计挺有兴趣的。可是，因为是学渣，所以到最后都不了了之了。所以需要再一次就业，自然而然的就选了互联网这个行业，非要说具体原因两点，第一，收入还可以，能养活自己。第二，并不讨厌这个行业。仅此而已。</p>
+<p><strong>二、关于学习前端是培训还是自学</strong></p>
+<p>这是大家最关心的一个问题，也是我来知乎提问的初衷。在开始学一门技术的时候大多数人都会存在这样的问题，怎么学？对于这个问题本身的回答也分为两类。毫无疑问，一个是培训，一个是自学。回答中也有很多类似的调调。关于不赞成培训的，也就是赞成自学。原因很简单，却也是很现实的一个问题，多数的培训机构都是坑。而且在面试中也有很多人会尽可能的不说自己是培训机构出来的。也有很多人在给我举例说明，我们公司某某某，培训出来的，来了几天几天被扫地出门，狗屁不会。而赞成培训的，是说培训机构可以学到东西，而我觉得： 还是要看个人情况来的。在评论中也有比较诚恳的回答，我也是很赞成的。我当时的情况是，六月份辞职，由于跟家里人赌气，其实也是跟自己赌气，我一个人来到北京。辞掉工作就没有了经济来源。也就是我必须短期内找到一份能够养活自己的工作。那个时候我想着不如先找一份简单的工作先做着，一边工作一边学习。但是我知道我并不是一个自控力很强的人，如果是一年的时间，每天都花掉工作以外的其他时间去学习一门新的技术，还不如集中精力的学。这样我才选择了培训。而对于培训，如果找到一家还算靠谱的培训机构的话，对于自己的提升速度肯定是有帮助的，但是就是要看这种提升能不能达到你的要求。如果你仅仅是想找到一份工作，然后再学习，并且自控力，学习能力都比较强，我觉得自学是完全可以的。</p>
+<p>而如果你是想得到速度上的提升，也必然要付出相应的代价。在我来看来，实质上，这就是一种金钱与时间的互换，而金钱能买到多少时间，取决于培训机构的质量。质量比较次的话，花了钱，浪费了时间也是很有可能的。而且无论培训还是自学，靠的终究还是自己。就算是全国著名教师一对一辅导，而你每天脑子里却都是苍井老师。。</p>
+<p>如果非要用什么比喻的话，培训出来的就好比是练的辟邪剑谱葵花宝典之类的，虽然在短时间内会有一个比较显著的提升，但是终归是根基不稳。但是还是比不上那些从小研习易筋经的和尚。虽然敲代码是不用引刀自宫的。没你花哨，但比你管用。而且培训也不是每天等人往你脑子里塞东西，这样的东西是消化不掉的，也只能是黑瞎子掰玉米。</p>
+<p>现在来说一下近况吧。我六月份辞职，之后玩了一个月。然后开始的培训，算上每周两天的休息时间一共两个月。之后找到了一份工作，现已经工作了三个月左右，薪水10K。虽然这个薪水不算高，但按照我的计划，我已经成功了，而我明白这只是个开始。过程有点小心酸也无伤大雅。那个时候课程有HTML+CSS和JS这三门课程，我并没有学习HTML+CSS而直接选择了学习JS。这导致的结果就是直到现在HTML+CSS也是我的一块短板，而在工作中我也避重就轻的选择了尽量写JS，不去写HTML+CSS，实在是不怎么样。在学习的过程中，一起培训的多是学完了HTML+CSS来学JS的，这导致的结果就是，很多时候讲的JS我是可以听懂的，可是写一个布局却要花费掉我大量的时间。那两个月，每天敲代码的时间大概在14个小时左右，除了一些不可避免的生理问题，比如吃喝拉撒。由于之前休息了一个月，所以开始的时候精力是够得，每天的花掉大量的时间敲代码，而之后真的是太过疲惫，因为每天早上根本就听不见闹钟，即使我已经将音量开到最大。最后几天的时候，我想好好的休息一下，竟然出现了一些诡异的情况。非常疲惫，可是精神比较亢奋，睡不着！我不知道我这样的描述是否准确，可那个时候就是这种感觉。然后强迫自己睡觉，因为那些脑死亡的传闻之前着实把我下了够呛，只是想，别他娘的出师未捷。事实证明，仅仅是累了而已。</p>
+<p>总而言之，关于培训还是自学，我想我已经把我理解的都写出来了。提取对于自己有用的信息是一种能力，在众多信息中，根据自己的情况，找出最适合自己的方式才是最好的。那些一概而论是不负责任的行为。</p>
+<p><strong>三、一种精神</strong> 如果你来到这里提问，仅仅想得到一个答案，我想会失望的。没有人能够告诉你应该怎样做，即使他斩钉截铁的告诉你，也只是因为他不用对你的人生负责。对于小三儿还有个说法，这里什么都没有。但如果是想来这里得到一些有用的信息，那么至少我的期望达到了。在这里我也收到了很多对于这个问题的理解。虽然很多描述的可能是冰山一角，但是通过不同的角度，你却可以勾勒出一个大致的轮廓。在此过程中，很多人很认真的跟我讲解了自己的看法，收获了一些意外的感动。对于这些人再次表示感谢。哪怕只是一种无形的感恩。不论他们的技术强弱，但是我觉得这是一种精神。参与和分享。我也学会了将这种精神传递下去。虽然在这个环节上也出了一些问题，比如：如何提问。稍后讲。</p>
+<p><strong>四、对于技术的理解</strong> 对于技术，更多的还是来源于经验的积累。前端来讲，最基础的HTML+CSS+JS不用解释。我所理解的框架就是零件。对于一个工科生，我也只能找到这样的比喻。同样是生产一台机器，框架就是螺丝一类的基本零件，你用这些框架可以生产出一台机器，而我这有铁铜一类的元素，我也可以生产出一台机器。只不过要比使用框架----也就是零件更加麻烦一些。但是我有这些元素却可以生产出不一样的螺丝。所以框架方便了生产，一定程度是也减少了可能性。所以基础很重要。理解的不知道准不准，望指正。</p>
+<p><strong>五、关于提问</strong> 在第三点中说过，在提问的过程中也出现了一些问题。我在工作以后也有网上的朋友来问我一些问题，我也尽我所能的去解答，可是有的问题真的让没法回答。比如，我想做个淘宝的界面，怎么做？JS和JQ我学哪个好？诸如此类问题。更有甚者在QQ上直接丢给我个文件，告诉我，这页面挂了，你能帮我弄好么？就这样，一场技术交流变成了单方面的慈善。</p>
+<p><strong>六、结尾</strong> 其实感觉还有很多东西要说。可忽然又了种&quot;想要说些什么又不知从何说起&quot;的感觉。最主要的原因我困了。。。也都是想到哪些到哪。如果有什么问题大家可以直接问，知无不言，言无不尽。对于我这种市井小民，除了沙发上的屁股印，能帮到别人同样也可以提升我的存在感，好让我出现一种这个世界需要我的错觉。哈哈。我发过一条状态，你已走到天涯海角，我却还没出发，连鞋带都系不好。最后不煽情一下对不起我写的这一个小时。</p>
+<p>2016，我在路上，你出发了么？</p>
+<h2 id="16">1.6. 六 各大企业前端团队</h2>
+<p>Baidu: <a href="http://fex.baidu.com/">百度 FEX</a></p>
+<p>Alibaba: <a href="http://taobaofed.org/">淘宝 FED</a>、<a href="http://alinode.aliyun.com/">alinode</a></p>
+<p>Tencent: <a href="http://www.alloyteam.com/">腾讯全端</a>、<a href="http://tgideas.qq.com/#5">腾讯游戏设计团队</a></p>
+<p>sina: <a href="http://ued.sina.com/">新浪UED</a></p>
+<p>京东: <a href="https://aotu.io/index.html">凹凸实验室</a></p>
+<p>360: <a href="http://www.75team.com/">奇舞团</a></p>
+<p>携程: <a href="http://ued.ctrip.com/blog/">UED</a></p>
+
+        </article>
+    </body>
+</html>
